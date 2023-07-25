@@ -1,4 +1,8 @@
-const { getDecks, deleteDeck } = require('../repositories/deckRepository');
+const {
+  getDecks,
+  deleteDeck,
+  getDeck,
+} = require('../repositories/deckRepository');
 const Toast = require('../utils/toast');
 
 async function renderDecks() {
@@ -7,6 +11,7 @@ async function renderDecks() {
   console.log('Decks: ', decks);
   decksContainer.innerHTML = renderDecksList(decks);
   handleDeleteDeck();
+  handleGotoDeck();
 }
 
 function renderDecksList(decks) {
@@ -87,6 +92,21 @@ function handleDeleteDeck() {
         const toast = new Toast();
         await toast.show('Error deleting deck', 'Error', 500, 'error');
       }
+    });
+  });
+}
+
+function handleGotoDeck() {
+  const deckBtns = document.querySelectorAll('.deck-btn');
+
+  deckBtns.forEach((btn) => {
+    btn.addEventListener('click', async (e) => {
+      const deckId = e.target.id;
+      console.log('Deck id: ', deckId);
+      const deck = await getDeck(deckId);
+      console.log('Deck: ', deck);
+
+      window.location.href = `./deck.html?id=${deckId}`;
     });
   });
 }
