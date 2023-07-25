@@ -2,26 +2,29 @@ const {
   getDecks,
   deleteDeck,
   getDeck,
+  getDecksLikeName,
 } = require('../repositories/deckRepository');
 const Toast = require('../utils/toast');
-
 async function renderDecks() {
+  let decks = (await getDecks()) || [];
   const decksContainer = document.getElementById('decks');
-  const decks = await getDecks();
-  console.log('Decks: ', decks);
+  // const decks = await getDecks();
+  // console.log('Decks: ', decks);
   decksContainer.innerHTML = renderDecksList(decks);
   handleDeleteDeck();
   handleGotoDeck();
-}
+  handleSearchDeck();
 
-function renderDecksList(decks) {
-  return `
+  function renderDecksList(decks) {
+    return `
   <div class="decks grid md:grid-cols-12 gap-2">
     ${decks
       ?.map((deck) => {
         return `
-        <div class="deck col-span-4 card gap-2">
-          <button class='deck-btn font-bold text-lg' id='${deck.id}'>
+        <div class="col-span-4 card bg-base-200 card-compact p-4 gap-2 shadow-xl">
+          <button class='btn-link font-bold text-lg card-title deck-btn' id='${
+            deck.id
+          }'>
             ${deck.name}
           </button>
           <p class="text-">${deck.description ?? 'No description'}</p>
@@ -58,10 +61,10 @@ function renderDecksList(decks) {
           </button>
           <div class="accordion-panel accordion-details" id="panel${deck.id}">
             <div class="actions flex items-center justify-between ">
-              <button  class="btn btn-light">edit</button>
+              <button  class="btn btn-neutral">edit</button>
               <button id="deleteDeck" data-deckId="${
                 deck.id
-              }" class="btn btn-danger">delete</button>
+              }" class="btn btn-error">delete</button>
             </div>
           </div>
         </div>
@@ -70,45 +73,60 @@ function renderDecksList(decks) {
       .join('')}
   </div>
 `;
-}
+  }
 
-function handleDeleteDeck() {
-  const deleteDeckBtns = document.querySelectorAll('#deleteDeck');
-  deleteDeckBtns.forEach((btn) => {
-    btn.addEventListener('click', async (e) => {
-      const deckId = e.target.dataset.deckid;
-      console.log('Deck id: ', deckId);
-      try {
-        const toast = new Toast();
-        await deleteDeck(deckId);
-        await toast.show(
-          'Deck deleted successfully',
-          'Success',
-          500,
-          'success'
-        );
-        window.location.reload();
-      } catch (error) {
-        const toast = new Toast();
-        await toast.show('Error deleting deck', 'Error', 500, 'error');
-      }
+  function handleDeleteDeck() {
+    const deleteDeckBtns = document.querySelectorAll('#deleteDeck');
+    deleteDeckBtns.forEach((btn) => {
+      btn.addEventListener('click', async (e) => {
+        const deckId = e.target.dataset.deckid;
+        console.log('Deck id: ', deckId);
+        try {
+          const toast = new Toast();
+          await deleteDeck(deckId);
+          await toast.show(
+            'Deck deleted successfully',
+            'Success',
+            500,
+            'success'
+          );
+          window.location.reload();
+        } catch (error) {
+          const toast = new Toast();
+          await toast.show('Error deleting deck', 'Error', 500, 'error');
+        }
+      });
     });
-  });
-}
+  }
 
-function handleGotoDeck() {
-  const deckBtns = document.querySelectorAll('.deck-btn');
+  function handleGotoDeck() {
+    const deckBtns = document.querySelectorAll('.deck-btn');
 
-  deckBtns.forEach((btn) => {
-    btn.addEventListener('click', async (e) => {
-      const deckId = e.target.id;
-      console.log('Deck id: ', deckId);
-      const deck = await getDeck(deckId);
-      console.log('Deck: ', deck);
+    deckBtns.forEach((btn) => {
+      btn.addEventListener('click', async (e) => {
+        const deckId = e.target.id;
+        console.log('Deck id: ', deckId);
+        const deck = await getDeck(deckId);
+        console.log('Deck: ', deck);
 
-      window.location.href = `./deck.html?id=${deckId}`;
+        window.location.href = `./deck.html?id=${deckId}`;
+      });
     });
-  });
+  }
+
+  function handleSearchDeck() {
+    const deckSearchInput = document.getElementById('deckSearch');
+
+    deckSearchInput.addEventListener('input', async (e) => {
+      const searchTerm = e.target.value;
+      const foundDecks = await getDecksLikeName(searchTerm);
+      console.log('Found decks: ', foundDecks);
+      decks = foundDecks;
+      decksContainer.innerHTML = renderDecksList(decks);
+      handleDeleteDeck();
+      handleGotoDeck();
+    });
+  }
 }
 
 module.exports = renderDecks;

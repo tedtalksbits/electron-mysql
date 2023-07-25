@@ -37,6 +37,14 @@ const deckRepository = {
 
     return await deckRepository.getDeck(rows.insertId);
   },
+
+  async getDecksLikeName(name) {
+    const [rows] = await connection.execute(
+      'SELECT * FROM decks WHERE name LIKE ?',
+      [`%${name}%`]
+    );
+    return rows;
+  },
 };
 
 module.exports = deckRepository;
