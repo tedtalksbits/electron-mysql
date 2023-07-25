@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* rotate animation */
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes rotate {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-moz-keyframes rotate {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+
+@-o-keyframes rotate {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(360deg);
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-gray-100 dark:bg-black text-gray-900 dark:text-gray-100;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold dark:text-white text-gray-900;
+  }
+
+  *,
+  ::before,
+  ::after {
+    @apply dark:border-white/5 border-black/5;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-block px-4 py-2 rounded-lg;
+  }
+  .btn-primary {
+    @apply bg-sky-500 hover:bg-opacity-100 bg-opacity-25 ring-1 ring-opacity-40 ring-sky-500 text-white transition-colors duration-200;
+  }
+  .btn-secondary {
+    @apply bg-gray-500 hover:bg-opacity-100 bg-opacity-25 ring-1 ring-opacity-40 ring-gray-500 text-white transition-colors duration-200;
+  }
+  .btn-tertiary {
+    @apply bg-gray-100 hover:bg-opacity-100 bg-opacity-25 ring-1 ring-opacity-40 ring-gray-100 text-gray-900 transition-colors duration-200;
+  }
+  .btn-danger {
+    @apply bg-red-500 hover:bg-opacity-100 bg-opacity-25 ring-1 ring-opacity-40 ring-red-500 text-white transition-colors duration-200;
+  }
+  .btn-success {
+    @apply bg-green-500 hover:bg-opacity-100 bg-opacity-25 ring-1 ring-opacity-40 ring-green-500 text-white transition-colors duration-200;
+  }
+  .btn-warning {
+    @apply bg-yellow-500 hover:bg-opacity-100 bg-opacity-25 ring-1 ring-opacity-40 ring-yellow-500 text-white transition-colors duration-200;
+  }
+  .btn-info {
+    @apply bg-blue-500 hover:bg-opacity-100 bg-opacity-25 ring-1 ring-opacity-40 ring-blue-500 text-white transition-colors duration-200;
+  }
+  .btn-light {
+    @apply bg-black dark:bg-white hover:bg-opacity-30 dark:bg-opacity-10 bg-opacity-10 ring-1 ring-opacity-30 ring-black/5 dark:ring-white/10 dark:text-white transition-colors duration-200;
+  }
+  .card {
+    @apply bg-gray-50 dark:bg-white/5 rounded-lg shadow-lg p-2 dark:text-gray-100 text-gray-900 border flex flex-col;
+  }
+
+  dialog {
+    @apply bg-white dark:bg-[#1c1c1c] rounded-lg shadow-lg p-4 dark:text-gray-100 text-gray-900 w-full max-w-3xl;
+  }
+  dialog::backdrop {
+    @apply bg-black/50 backdrop-blur-sm;
+  }
+
+  input,
+  select,
+  textarea {
+    @apply rounded-md p-2 dark:text-gray-100 text-gray-900 focus:ring-2 focus:ring-sky-500 focus:outline-none appearance-none w-full inline-block bg-black/5 dark:bg-white/5 dark:placeholder-gray-600 placeholder-gray-600 border;
+  }
+
+  summary {
+    @apply cursor-pointer dark:text-gray-100 text-gray-900 flex flex-col select-none mb-2;
+  }
+
+  details {
+    @apply rounded-lg shadow-lg p-2 dark:text-gray-100 text-gray-900;
+  }
+
+  button.accordion {
+    @apply bg-transparent dark:text-gray-100 text-gray-900 cursor-pointer p-3 w-full text-left border-none outline-none transition duration-[0.4s] ease-in-out hover:bg-gray-100 font-semibold items-center justify-between flex;
+  }
+
+  button.accordion > * {
+    @apply pointer-events-none;
+  }
+
+  button.accordion.active,
+  button.accordion:hover {
+    @apply bg-gray-100 dark:bg-white/5;
+  }
+
+  /* animate icon rotation */
+  button.accordion.active > .accordion-summary-icon {
+    @apply rotate-90 duration-[0.15s];
+  }
+
+  .accordion-summary-icon {
+    @apply transition duration-[0.15] ease-in-out;
+  }
+
+  div.accordion-panel {
+    @apply px-3 max-h-0 overflow-hidden transition-[max-height] duration-[0.2s] ease-out;
+  }
+  div.accordion-panel > * {
+    @apply my-2;
+  }
+}
+
+.rotate {
+  -webkit-animation: rotate 1s linear infinite;
+  -moz-animation: rotate 1s linear infinite;
+  -o-animation: rotate 1s linear infinite;
+  animation: rotate 6s linear infinite;
+  display: inline-block;
+  transform-origin: center center;
+}

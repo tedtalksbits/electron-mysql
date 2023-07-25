@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="./dist/output.css" />
+    <title>Electron MYSQL | deck</title>
+  </head>
+  <body>
+    <main id="deckRoot" class="max-w-7xl mx-auto p-4">
+      <nav>
+        <a href="./index.html">Home</a>
+      </nav>
+      <h1>Deck</h1>
+    </main>
+
+    <script>
+      const search = window.location.search;
+      const params = new URLSearchParams(search);
+      console.log(search);
+      console.log(params);
+      console.log(params.get('id'));
+
+      const id = params.get('id');
+
+      const deck = document.createElement('div');
+      deck.innerHTML = id;
+      const deckRoot = document.getElementById('deckRoot');
+      deckRoot.appendChild(deck);
+
+      const connection = require('./utils/sql.js');
+      (async () => {
+        const [rows, fields] = await connection.execute(
+          `SELECT * FROM flashcards WHERE deck_id = ${id}`
+        );
+
+        console.log(rows);
+      })();
+    </script>
+  </body>
+</html>
